@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -20,6 +21,7 @@ class AuthController extends Controller
             'isAdmin' => $request->input('isAdmin'),
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
         return response($user, Response::HTTP_CREATED);
     }
 
@@ -32,6 +34,12 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        if (!($user->email_verified_at)) {
+            return \response([
+                'message' => ['Email not verified']
+            ], Response::HTTP_UNAUTHORIZED);
+        }
 
         $token = $user->createToken('token')->plainTextToken;
 
