@@ -15,7 +15,11 @@ class BooksController extends Controller
         $book->genre_id = $req->input('genre_id');
         $book->description = $req->input('description');
         $book->numberInStock = $req->input('numberInStock');
-        $book->image = $req->file('image')->store('book_pictures');
+        if ($req->file('image') == null) {
+            $book->image = '';
+        } else {
+            $book->image = $req->file('image')->store('book_pictures');
+        }
         $book->save();
         return response()->json($book, 200);
     }
@@ -38,11 +42,16 @@ class BooksController extends Controller
     function saveBook($id, Request $req)
     {
         $book = Book::find($id);
-        $book->title = $req->input('title');
-        $book->author = $req->input('author');
-        $book->genre_id = $req->input('genre_id');
-        $book->description = $req->input('description');
-        $book->numberInStock = $req->input('numberInStock');
+        if ($req->title)
+            $book->title = $req->title;
+        if ($req->author)
+            $book->author = $req->author;
+        if ($req->genre_id)
+            $book->genre_id = $req->genre_id;
+        if ($req->description)
+            $book->description = $req->description;
+        if ($req->numberInStock)
+            $book->numberInStock = $req->numberInStock;
         if ($req->file('image')) {
             $book->image = $req->file('image')->store('book_pictures');
         }
@@ -54,9 +63,9 @@ class BooksController extends Controller
     {
         $result = Book::where('id', $id)->delete();
         if ($result) {
-            return ['result' => 'Book has been deleted'];
+            return response()->json('Book has been deleted', 200);
         } else {
-            return ['result' => 'Book not found'];
+            return response()->json('Operation failed!', 400);
         }
     }
 }

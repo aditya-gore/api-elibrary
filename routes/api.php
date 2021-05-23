@@ -26,7 +26,7 @@ Route::post('reset', [PasswordController::class, 'reset']);
 Route::get('list', [BooksController::class, 'list']);
 Route::get('getBook/{id}', [BooksController::class, 'getBook']);
 Route::post('addBook', [BooksController::class, 'addBook']);
-Route::put('saveBook/{id}', [BooksController::class, 'saveBook']);
+Route::post('saveBook/{id}', [BooksController::class, 'saveBook']);
 Route::delete('delete/{id}', [BooksController::class, 'delete']);
 
 Route::middleware('auth:sanctum')->group(function () {

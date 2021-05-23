@@ -16,7 +16,7 @@ class VerifyEmailController extends Controller
 
         if ($user->hasVerifiedEmail()) {
             // return redirect(env('FRONT_URL') . '/email/verify/already-success');
-            return redirect('http://localhost:3000/login');
+            return redirect('http://localhost:3000/emailAlreadyVerified');
         }
 
         if ($user->markEmailAsVerified()) {
@@ -24,6 +24,6 @@ class VerifyEmailController extends Controller
         }
 
         // return redirect(env('FRONT_URL') . '/email/verify/success');
-        return redirect('http://localhost:3000/login');
+        return redirect('http://localhost:3000/emailVerified');
     }
 }
